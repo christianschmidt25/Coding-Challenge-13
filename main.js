@@ -10,13 +10,26 @@ fetch('https://www.course-api.com/javascript-store-products') //Link we are grab
         }
         return response.json(); //Turns response into JSON format
     })
-    .then(products => {
+    .then(data => {
+        console.log(data); //make sure the data appears as a JSON
+
+        const products = data
         products.forEach(product => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${product.title} - $${product.price}`;
-            productList.appendChild(listItem);
+            const productFields = product.fields; //gets into the fields object
+
+            const listItem = document.createElement('li'); //creates listItem as a variable for a list item in HTML
+
+            listItem.innerHTML = `
+                <img src="${productFields.image[0].url}" alt="${productFields.name}" style="width: 200px;">
+                <span>${productFields.company} - ${productFields.name} - $${productFields.price}</span>
+                <p></p>
+                <p></p>
+            `; //Use innerHTML to write the HTML structure inside this file. Allows the link to run using img src, and adds the proper text using <span>. Also adds spacing between each product with <p>
+
+            productList.appendChild(listItem); //Adds each new listItem to the productList
+
         });
     })
     .catch(error => {
-        console.error('Fetch Operation Error:', error);
+        console.error('There was a problem loading the products at this time. Please try again in a few minutes.', error);
     });
